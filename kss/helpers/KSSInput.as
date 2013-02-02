@@ -62,7 +62,7 @@ package org.kss.helpers
 				keysPressedThisFrame.splice(index, 1);
 			}
 		}
-		
+		//called by KSSEngine after all Update loops are done
 		public function flush():void
 		{
 			keysReleasedThisFrame.length = 0;

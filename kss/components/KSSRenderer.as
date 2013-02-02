@@ -13,7 +13,7 @@ package org.kss.components
 	 * ...
 	 * @author Matt
 	 */
-	public class KSSRenderComponent extends KSSComponent
+	public class KSSRenderer extends KSSComponent
 	{
 		private var _canvas:KSSCanvas;
 		private var _pixels:BitmapData;
@@ -24,6 +24,7 @@ package org.kss.components
 		private var _worldPosition:Point = new Point(0, 0); //position to draw on current state
 		
 		private var _playAnimation:Boolean = false;
+		public function get isPlaying():Boolean { return _playAnimation; }
 		private var _loop:Boolean = true;
 		private var _animationArray:Array; //array containing ordered vectors of animations
 		private var _currentAnimation:Array;
@@ -31,7 +32,7 @@ package org.kss.components
 		private var _frameSpeed:int = 10; //play animation every '_frameSpeed' frames
 		private var _frameCount:int = 0;
 		
-		public function KSSRenderComponent(entity:KSSEntity, canvas:KSSCanvas) 
+		public function KSSRenderer(entity:KSSEntity, canvas:KSSCanvas) 
 		{
 			super(entity);
 			

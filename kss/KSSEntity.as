@@ -23,7 +23,7 @@ package org.kss
 			super();
 		}
 		
-		public function AddComponent(component:KSSComponent):KSSComponent
+		public function AddComponent(component:KSSComponent):*
 		{
 			_components.push(component);
 			
@@ -42,7 +42,7 @@ package org.kss
 			return false;
 		}
 		
-		public function GetComponentOfType(type:Class):KSSComponent
+		public function GetComponentOfType(type:Class):*
 		{
 			var length:int = _components.length;
 			for (var i:int = 0; i < length; i++)
@@ -56,9 +56,9 @@ package org.kss
 			return null;
 		}
 		
-		public function GetComponentsOfType(type:Class):Vector.<KSSComponent>
+		public function GetComponentsOfType(type:Class):Vector.<*>
 		{
-			var classComponents:Vector.<KSSComponent> = new Vector.<KSSComponent>();
+			var classComponents:Vector.<*> = new Vector.<*>();
 			
 			var length:int = _components.length;
 			for (var i:int = 0; i < length; i++)
