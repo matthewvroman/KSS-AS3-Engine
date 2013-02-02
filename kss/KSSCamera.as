@@ -9,36 +9,33 @@ package org.kss
 	 */
 	public class KSSCamera 
 	{
-		private var _stateCanvas:BitmapData;
-		private var _canvas:BitmapData;
-		public function get Canvas():BitmapData { return _canvas; }
-		private var _canvasColor:uint;
 		private var _width:Number;
 		private var _height:Number;
 		private var _zoom:Number;
 		
 		private var _frame:Rectangle;
-		private var _destPos:Point;
+		public function get frame():Rectangle { return _frame; }
+		
+		private var _frameCenter:Point = new Point(0,0);
+		/*public function get frameCenter():Point { 
+			_frameCenter.x = _width / 2;
+			_frameCenter.y = _height / 2;
+			return _frameCenter; 
+		}*/
 		
 		private var _target:KSSEntity;
-		
-		public function KSSCamera(width:Number, height:Number, canvas:BitmapData,bgColor:uint = 0x000000)
+
+		public function KSSCamera(width:Number, height:Number)
 		{
-			_stateCanvas = canvas;
 			_width = width;
 			_height = height;
-			_canvasColor = bgColor;
-			_canvas = new BitmapData(_width, _height, false, _canvasColor);
 
 			_frame = new Rectangle(0,0, _width, _height);
-			
-			_destPos = new Point(0, 0);
 			
 		}
 		
 		public function PreUpdate():void
 		{
-			_canvas.fillRect(_frame, _canvasColor);
 		}
 		
 		public function Update():void
@@ -46,15 +43,30 @@ package org.kss
 			
 		}
 		
-		public function Scroll(x:int, y:int):void
+		public function Scroll(x:Number, y:Number):void
 		{
 			_frame.x += x;
 			_frame.y += y;
 		}
 		
+		public function SnapTo(x:Number, y:Number):void
+		{
+			_frame.x = x;
+			_frame.y = y;
+		}
+		
+		public function SnapCenterTo(x:Number, y:Number):void
+		{
+			_frameCenter.x = x;
+			_frameCenter.y = y;
+			
+			_frame.x = _frameCenter.x - _width / 2;
+			_frame.y = _frameCenter.y - _height / 2;
+		}
+		
 		public function LateUpdate():void
 		{
-			_stateCanvas.copyPixels(_canvas, _frame, _destPos);
+
 		}
 		
 		public function FollowTarget(entity:KSSEntity):void
@@ -65,6 +77,8 @@ package org.kss
 		public function CenterOnTarget(entity:KSSEntity):void
 		{
 			_target = entity;
+			_frame.x = _target.position.x-_width/2;
+			_frame.y = _target.position.y-_height/2;
 		}
 		
 	}

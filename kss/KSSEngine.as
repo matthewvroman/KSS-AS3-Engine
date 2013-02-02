@@ -5,6 +5,7 @@ package org.kss
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.StatusEvent;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
 	import flash.display.PixelSnapping;
@@ -21,12 +22,12 @@ package org.kss
 		public var DefaultState:KSSState;
 		
 		//Canvas - Everything is drawn to this
-		private var CanvasData:BitmapData;
+		private var CanvasData:KSSCanvas;
 		private var Canvas:Bitmap;
-		public function get WriteCanvas():BitmapData { return CanvasData; }
+		public function get WriteCanvas():KSSCanvas { return CanvasData; }
 		private var CanvasRect:Rectangle;
 		private var CanvasColor:uint;
-		
+
 		private var _tickPosition:Number;
 		private var _tickLastPosition:Number;
 		private var _framePeriod:Number = 10; //paramatize this
@@ -36,7 +37,7 @@ package org.kss
 		public function KSSEngine(width:int = 640, height:int = 360, scale:Number = 1.0, bgColor:uint = 0x000000, fps:int = 60 ) 
 		{
 			
-			CanvasData = new BitmapData(width, height,false,bgColor);
+			CanvasData = new KSSCanvas(width, height,false,bgColor);
 			Canvas = new Bitmap(CanvasData);
 			Canvas.scaleX = Canvas.scaleY = scale;
 			CanvasRect = new Rectangle(0, 0, width, height);
@@ -92,20 +93,20 @@ package org.kss
 		
 		public function PreUpdate():void
 		{
-			if(_currentState)
-				_currentState.PreUpdate();
+			_currentState.PreUpdate();
+			CanvasData.currentCamera.PreUpdate();
 		}
 		
 		public function Update():void
 		{
-			if(_currentState)
-				_currentState.Update();
+			_currentState.Update();
+			CanvasData.currentCamera.Update();
 		}
 		
 		public function LateUpdate():void
 		{
-			if(_currentState)
-				_currentState.LateUpdate();
+			_currentState.LateUpdate();
+			CanvasData.currentCamera.LateUpdate();
 		}
 		
 	}

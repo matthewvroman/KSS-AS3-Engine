@@ -4,6 +4,7 @@ package org.kss.components
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import org.kss.KSSCanvas;
 	import org.kss.KSSComponent;
 	import org.kss.KSSEntity;
 	import org.kss.animation.KSSAnimationFrame;
@@ -14,13 +15,13 @@ package org.kss.components
 	 */
 	public class KSSRenderComponent extends KSSComponent
 	{
-		private var _canvas:BitmapData;
+		private var _canvas:KSSCanvas;
 		private var _pixels:BitmapData;
 		private var _bitmap:Bitmap;
 		private var _rect:Rectangle;
 		private var _position:Point; //position in the bitmap
 		
-		private var _statePosition:Point = new Point(0, 0); //position to draw on current state
+		private var _worldPosition:Point = new Point(0, 0); //position to draw on current state
 		
 		private var _playAnimation:Boolean = false;
 		private var _loop:Boolean = true;
@@ -30,7 +31,7 @@ package org.kss.components
 		private var _frameSpeed:int = 10; //play animation every '_frameSpeed' frames
 		private var _frameCount:int = 0;
 		
-		public function KSSRenderComponent(entity:KSSEntity, canvas:BitmapData) 
+		public function KSSRenderComponent(entity:KSSEntity, canvas:KSSCanvas) 
 		{
 			super(entity);
 			
@@ -63,15 +64,16 @@ package org.kss.components
 			if (!_pixels) return;
 			
 			
-			_statePosition.x = _position.x + _entity.position.x;
-			_statePosition.y = _position.y + _entity.position.y;
+			_worldPosition.x = _position.x + _entity.position.x;
+			_worldPosition.y = _position.y + _entity.position.y;
 			
 			updateAnimation();
 			
-			_canvas.copyPixels(_pixels, _rect, _statePosition);
+			//_canvas.copyPixels(_pixels, _rect, _worldPosition);
+			_canvas.RequestRender(_pixels, _rect, _worldPosition);
 			
 			//Debug Draw rectangle
-			//_canvas.copyPixels(new BitmapData(_rect.width, _rect.height, true, 0x77FF0000),_rect,_statePosition);
+			//_canvas.copyPixels(new BitmapData(_rect.width, _rect.height, true, 0x77FF0000),_rect,_worldPosition);
 		}
 		
 		//TODO: organize by labels and then sort by frame position

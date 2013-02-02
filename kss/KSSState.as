@@ -14,8 +14,8 @@ package org.kss
 	public class KSSState extends KSSObject 
 	{
 		protected var _engine:KSSEngine;
-		private var _canvas:BitmapData;
-		public function get Canvas():BitmapData { return _canvas; }
+		private var _canvas:KSSCanvas;
+		public function get Canvas():KSSCanvas { return _canvas; }
 		private var _entities:Vector.<KSSEntity> = new Vector.<KSSEntity>();
 		
 		public function KSSState(engine:KSSEngine) 
