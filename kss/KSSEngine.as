@@ -10,6 +10,7 @@ package org.kss
 	import flash.utils.getTimer;
 	import flash.display.PixelSnapping;
 	import org.kss.components.KSSCollider;
+	import org.kss.helpers.KSSInput;
 	/**
 	 * ...
 	 * @author Matt
@@ -33,6 +34,8 @@ package org.kss
 		private var _framePeriod:Number = 10; //paramatize this
 		
 		private var _fps:int;
+		
+		private var _input:KSSInput;
 		
 		public function KSSEngine(width:int = 640, height:int = 360, scale:Number = 1.0, bgColor:uint = 0x000000, fps:int = 60 ) 
 		{
@@ -59,6 +62,8 @@ package org.kss
 			
 			stage.frameRate = _fps;
 			
+			_input= new KSSInput(stage);
+			
 			addChild(Canvas);
 
 			_currentState = DefaultState;
@@ -80,6 +85,8 @@ package org.kss
 				Update();
 				LateUpdate();
 				CanvasData.unlock();
+				_input.flush();
+				
 		   }
 		   
 		   

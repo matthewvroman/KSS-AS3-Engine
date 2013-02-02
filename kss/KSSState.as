@@ -31,8 +31,31 @@ package org.kss
 
 		}
 		
+		override public function PreUpdate():void
+		{
+			super.PreUpdate();
+			var length:int = _entities.length;
+			for (var i:int = 0; i < length; i++)
+			{
+				_entities[i].PreUpdate();
+			}
+			
+		}
+		
+		override public function Update():void
+		{
+			super.Update();
+			var length:int = _entities.length;
+			for (var i:int = 0; i < length; i++)
+			{
+				_entities[i].Update();
+			}
+			
+		}
+		
 		override public function LateUpdate():void
 		{
+			super.LateUpdate();
 			var length:int = _entities.length;
 			for (var i:int = 0; i < length; i++)
 			{

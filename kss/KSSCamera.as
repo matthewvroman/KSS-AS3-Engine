@@ -13,6 +13,8 @@ package org.kss
 		private var _height:Number;
 		private var _zoom:Number;
 		
+		public var buffer:Number = 20;
+		
 		private var _frame:Rectangle;
 		public function get frame():Rectangle { return _frame; }
 		
@@ -22,6 +24,8 @@ package org.kss
 			_frameCenter.y = _height / 2;
 			return _frameCenter; 
 		}*/
+		
+		private var _deadZone:Rectangle;
 		
 		private var _target:KSSEntity;
 
