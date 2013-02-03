@@ -34,7 +34,7 @@ package org.kss.tilemaps
 		
 		public function TMXTileSet(src:XML) 
 		{
-			trace(src);
+			//trace(src);
 			_firstGID = src.@firstgid;
 			_name = src.@name;
 			_tileWidth = src.@tilewidth;
@@ -46,7 +46,7 @@ package org.kss.tilemaps
 			
 			loadImage();
 			
-			generateTileArray();
+			generateTileArray(src);
 		}
 		
 		public function loadImage():void
@@ -69,7 +69,7 @@ package org.kss.tilemaps
 			
 		}
 		
-		public function generateTileArray():void
+		public function generateTileArray(src:XML):void
 		{
 			var numColumns:int = int(_imgWidth / _tileWidth);
 			var numRows:int = int(_imgHeight / _tileHeight);
@@ -80,6 +80,16 @@ package org.kss.tilemaps
 				for (var j:int = 0; j < numColumns; j++)
 				{
 					var tile:TMXTile = new TMXTile(i + j + _firstGID, new Rectangle(j * _tileWidth, i * _tileHeight,_tileWidth,_tileHeight));
+					
+					var tileXML:XML = src.tile[i + j];
+					if (tileXML!=null)
+					{
+						var propertiesLength:int = tileXML.properties.property.length();
+						for (var k:int = 0;  k < propertiesLength; k++)
+						{
+							tile.AddProperty(new TMXProperty(tileXML.properties.property[k]));
+						}
+					}
 					_tiles.push(tile);
 				}
 			}

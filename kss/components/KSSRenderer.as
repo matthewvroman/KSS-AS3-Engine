@@ -32,6 +32,8 @@ package org.kss.components
 		private var _frameSpeed:int = 10; //play animation every '_frameSpeed' frames
 		private var _frameCount:int = 0;
 		
+		public var scrollRate:Number=1;
+		
 		public function KSSRenderer(entity:KSSEntity, canvas:KSSCanvas) 
 		{
 			super(entity);
@@ -77,7 +79,7 @@ package org.kss.components
 			updateAnimation();
 			
 			//_canvas.copyPixels(_pixels, _rect, _worldPosition);
-			_canvas.RequestRender(_pixels, _rect, _worldPosition);
+			_canvas.RequestRender(_pixels, _rect, _worldPosition,scrollRate);
 			
 			//Debug Draw rectangle
 			//_canvas.copyPixels(new BitmapData(_rect.width, _rect.height, true, 0x77FF0000),_rect,_worldPosition);

@@ -2,6 +2,7 @@ package org.kss.tilemaps
 {
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
+	import org.kss.tilemaps.TMXBase;
 	/**
 	 * ...
 	 * @author Matt
@@ -11,7 +12,7 @@ package org.kss.tilemaps
 	 * Copyright (c) 2010 by Thomas Jahn
 	 * This content is released under the MIT License.
 	 ******************************************************************************/
-	public class TMXLayer 
+	public class TMXLayer extends TMXBase
 	{
 		
 		public var name:String;
@@ -87,6 +88,13 @@ package org.kss.tilemaps
 						}
 						tileGIDs = tempTileGIDs;
 				}
+			}
+			
+			//var properties:XML = src.properties.property[0];
+			var propertiesLength:int = src.properties.property.length();
+			for (var k:int = 0;  k < propertiesLength; k++)
+			{
+				AddProperty(new TMXProperty(src.properties.property[k]));
 			}
 		}
 		

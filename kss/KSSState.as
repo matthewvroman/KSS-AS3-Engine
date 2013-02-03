@@ -8,6 +8,7 @@ package org.kss
 	import org.kss.KSSCollisionGroup;
 	import org.kss.KSSEntity;
 	import org.kss.KSSEngine;
+	import org.kss.tilemaps.TMXMap;
 	
 	/**
 	 * ...
@@ -197,9 +198,9 @@ package org.kss
 			return false;
 		}
 		
-		public function RegisterCollisionGroup(groupName:String):Boolean
+		public function RegisterCollisionGroup(groupName:String,TileMap:TMXMap=null):Boolean
 		{
-			var newGroup:KSSCollisionGroup = new KSSCollisionGroup(groupName);
+			var newGroup:KSSCollisionGroup = new KSSCollisionGroup(groupName,TileMap);
 			_collisionGroups.push(newGroup);
 			_numCollisionGroups = _collisionGroups.length;
 			

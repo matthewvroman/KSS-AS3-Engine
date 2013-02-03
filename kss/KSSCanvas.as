@@ -25,11 +25,11 @@ package org.kss
 			
 		}
 		
-		public function RequestRender(pixels:BitmapData, rect:Rectangle, pos:Point):void
+		public function RequestRender(pixels:BitmapData, rect:Rectangle, pos:Point,scroll:Number=1):void
 		{
 
-			pos.x -= _currentCamera.frame.x;
-			pos.y -= _currentCamera.frame.y;
+			pos.x -= _currentCamera.frame.x*scroll;
+			pos.y -= _currentCamera.frame.y*scroll;
 			//TODO: don't copy pixels if they're outside the frame
 			copyPixels(pixels, rect, pos);
 		}

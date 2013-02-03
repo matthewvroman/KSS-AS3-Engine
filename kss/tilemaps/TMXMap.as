@@ -6,11 +6,15 @@ package org.kss.tilemaps
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import org.kss.KSSCanvas;
+	import org.kss.KSSEntity;
+	import org.kss.KSSState;
+	import org.kss.components.KSSCollider;
+	import org.kss.tilemaps.TMXTileInfo;
 	/**
 	 * ...
 	 * @author Matt
 	 */
-	public class TMXMap 
+	public class TMXMap extends KSSEntity
 	{
 		
 		private var _canvas:KSSCanvas; //canvas to draw to
@@ -39,9 +43,9 @@ package org.kss.tilemaps
 			return true;
 		}
 		
-		public function TMXMap(canvas:KSSCanvas, filepath:String) 
+		public function TMXMap(state:KSSState, canvas:KSSCanvas, filepath:String) 
 		{
-			
+			super(state);
 			_canvas = canvas;
 			
 			var loader:URLLoader = new URLLoader();
@@ -52,7 +56,7 @@ package org.kss.tilemaps
 		private function onMapLoaded(e:Event):void
 		{
 			var src:XML = new XML(e.target.data);
-			
+			//trace(src);
 			//assign map properties
 			_mapWidth = src.@width;
 			_mapHeight = src.@height;
@@ -86,6 +90,40 @@ package org.kss.tilemaps
 			{
 				_objectGroups.push(new TMXObjectGroup(src.objectgroup[i]));
 			}
+		}
+		
+		public function getSurroundingTiles(rect:Rectangle, tileBuffer:int):Vector.<TMXTileInfo>
+		{
+			//determine tile that point is in
+			var startingColumn:int = int(rect.x / _tileWidth);
+			var numColumnsInRect:int = int(rect.width / _tileWidth);;
+			var numColumnsToReturn:int = startingColumn + numColumnsInRect + tileBuffer;
+			var startingRow:int = int(rect.y / _tileHeight);
+			var numRowsInRect:int = int(rect.height/_tileHeight);
+			var numRowsToReturn:int = startingRow + numRowsInRect + tileBuffer;
+			
+			var numLayers:int = _layers.length;
+			var numColumns:int = _mapWidth;
+			var tile:TMXTile;
+			var tilePos:Point = new Point(0, 0);
+			
+			var surroundingTiles:Vector.<TMXTileInfo> = new Vector.<TMXTileInfo>();
+			for (var i:int = startingRow; i < numRowsToReturn; i++)
+			{
+				for (var j:int = startingColumn; j < numColumnsToReturn; j++)
+				{
+					for (var k:int = 0; k < numLayers; k++){
+						var gid:uint = _layers[k].tileGIDs[j+(i*numColumns)];
+						tile = getTile(gid);
+						tilePos.x = j * _tileWidth;
+						tilePos.y = i * _tileHeight;
+						if(tile!=null)
+							surroundingTiles.push(new TMXTileInfo(tile,tilePos.clone()));
+					}
+				}
+			}
+			
+			return surroundingTiles;
 		}
 		
 		public function draw():void
@@ -145,7 +183,37 @@ package org.kss.tilemaps
 				}
 			}*/
 		}
-		
+		/*
+		public function setupCollision():void
+		{
+			var numColumns:int = _mapWidth;
+			var numRows:int = _mapHeight;
+			var tilePos:Point = new Point(0, 0);
+			var tileSet:TMXTileSet;
+			var tile:TMXTile;
+			for (var i:int = 0; i < numRows; i++)
+			{
+				for (var j:int = 0; j < numColumns; j++)
+				{
+					var gid:uint = _layers[0].tileGIDs[j+(i*numColumns)];
+					tileSet = getTileSetWithGID(gid);
+					tile = getTile(gid);
+					tilePos.x = j * _tileWidth;
+					tilePos.y = i * _tileHeight;
+					if (tileSet != null && tile != null) {
+						if (tile.GetPropertyByName("collision"))
+						{
+							var worldRect:Rectangle = new Rectangle(tilePos.x, tilePos.y, _tileWidth, _tileHeight);
+							var collider:KSSCollider = new KSSCollider(this, worldRect);
+							collider.active = false;
+							AddComponent(collider);
+							trace("added collider at: " + worldRect);
+						}
+					}
+				}
+			}
+		}
+		*/
 		public function getTileSetWithGID(gid:uint):TMXTileSet
 		{
 			for (var i:int = 0; i < _tileSets.length; i++)
