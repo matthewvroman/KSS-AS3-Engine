@@ -4,6 +4,8 @@ package org.kss
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import org.kss.components.KSSCollider;
+	import org.kss.KSSCollisionGroup;
 	import org.kss.KSSEntity;
 	import org.kss.KSSEngine;
 	
@@ -17,6 +19,9 @@ package org.kss
 		private var _canvas:KSSCanvas;
 		public function get Canvas():KSSCanvas { return _canvas; }
 		private var _entities:Vector.<KSSEntity> = new Vector.<KSSEntity>();
+		
+		private var _collisionGroups:Vector.<KSSCollisionGroup> = new Vector.<KSSCollisionGroup>();
+		private var _numCollisionGroups:int = 0;
 		
 		public function KSSState(engine:KSSEngine) 
 		{
@@ -49,6 +54,11 @@ package org.kss
 			for (var i:int = 0; i < length; i++)
 			{
 				_entities[i].Update();
+			}
+			
+			for (var j:int = 0; j < _numCollisionGroups; j++)
+			{
+				_collisionGroups[j].Check();
 			}
 			
 		}
@@ -112,6 +122,65 @@ package org.kss
 				return classEntities;
 				
 			return null;
+		}
+		
+		public function RegisterCollider(collider:KSSCollider, collisionGroup:String=""):Boolean
+		{
+			var registered:Boolean;
+			for (var i:int = 0; i < _numCollisionGroups; i++)
+			{
+				if (_collisionGroups[i].name == collisionGroup)
+				{
+					_collisionGroups[i].AddMember(collider);
+					registered = true;
+				}
+			}
+			
+			if (!registered)
+			{
+				var newGroup:KSSCollisionGroup = new KSSCollisionGroup(collisionGroup);
+				newGroup.AddMember(collider);
+				_collisionGroups.push(newGroup);
+				registered = true;
+			}
+			
+			_numCollisionGroups = _collisionGroups.length;
+			
+			return registered;
+		}
+		
+		public function UnregisterCollider(collider:KSSCollider):Boolean
+		{
+			for (var i:int = 0; i < _numCollisionGroups; i++)
+			{
+				if (_collisionGroups[i].RemoveMember(collider))
+					return true;
+			}
+			
+			return false;
+		}
+		
+		public function RegisterCollisionGroup(groupName:String):Boolean
+		{
+			var newGroup:KSSCollisionGroup = new KSSCollisionGroup(groupName);
+			_collisionGroups.push(newGroup);
+			_numCollisionGroups = _collisionGroups.length;
+			
+			return true;
+		}
+		
+		public function UnregisterCollisionGroup(groupName:String):Boolean
+		{
+			for (var i:int = 0; i < _numCollisionGroups; i++)
+			{
+				if (_collisionGroups[i].name == groupName)
+				{
+					_collisionGroups.splice(i, 1);
+					_numCollisionGroups = _collisionGroups.length;
+					return true;
+				}
+			}
+			return false;
 		}
 		
 		override public function Destroy():void

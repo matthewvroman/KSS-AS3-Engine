@@ -49,7 +49,7 @@ package org.kss
 		
 		public function Update():void
 		{
-			trace(_frame.x);
+			
 		}
 		
 		public function set zoom(scale:Number):void

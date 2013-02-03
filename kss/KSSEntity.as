@@ -1,6 +1,7 @@
 package org.kss 
 {
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import org.kss.KSSComponent;
 	import org.kss.KSSObject;
 	import org.kss.KSSState;

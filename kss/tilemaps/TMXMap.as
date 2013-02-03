@@ -24,6 +24,11 @@ package org.kss.tilemaps
 		private var _objectGroups:Vector.<TMXObjectGroup> = new Vector.<TMXObjectGroup>();
 		private var _layers:Vector.<TMXLayer> = new Vector.<TMXLayer>();
 		
+		// Bits on the far end of the 32-bit global tile ID are used for tile flags
+		private const FLIPPED_HORIZONTALLY_FLAG:uint = 0x80000000;
+		private const FLIPPED_VERTICALLY_FLAG:uint  = 0x40000000;
+		private const FLIPPED_DIAGONALLY_FLAG:uint   = 0x20000000;
+		
 		public function get ready():Boolean
 		{
 			for (var i:int = 0; i < _tileSets.length; i++)
@@ -47,7 +52,6 @@ package org.kss.tilemaps
 		private function onMapLoaded(e:Event):void
 		{
 			var src:XML = new XML(e.target.data);
-			//trace(src);
 			
 			//assign map properties
 			_mapWidth = src.@width;
@@ -154,8 +158,9 @@ package org.kss.tilemaps
 			return null;
 		}
 		
-		public function getTile(gid:uint):TMXTile
+		public function getTile(gid:int):TMXTile
 		{  
+
 			for (var i:int = 0; i < _tileSets.length; i++)
 			{
 				if (_tileSets[i].FirstGID > gid) continue;

@@ -75,7 +75,7 @@ package org.kss.tilemaps
 					
 					//for (var i:int = 0; i < 100; i++) {
 						tileGIDs = base64ToArray(chunk, width, compressed);	
-						trace(tileGIDs);
+						//trace(tileGIDs);
 						var tempTileGIDs:Array = new Array();
 						for (var i:int = 0; i < tileGIDs.length; i++)
 						{

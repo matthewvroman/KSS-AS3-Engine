@@ -17,7 +17,6 @@ package org.kss.tilemaps
 		{
 			_gid = gid;
 			_rect = rect;
-			trace("Tile " + _gid + " : " + _rect);
 		}
 		
 	}

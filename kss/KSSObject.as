@@ -9,7 +9,9 @@ package org.kss
 	 */
 	public class KSSObject 
 	{
-
+		
+		public var name:String;
+		
 		public function KSSObject() 
 		{
 			Awake();

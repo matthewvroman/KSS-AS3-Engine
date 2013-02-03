@@ -31,7 +31,7 @@ package org.kss
 
 		private var _tickPosition:Number;
 		private var _tickLastPosition:Number;
-		private var _framePeriod:Number = 10; //paramatize this
+		private var _framePeriod:Number = 1; //paramatize this
 		
 		private var _fps:int;
 		
