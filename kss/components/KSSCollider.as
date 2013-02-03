@@ -1,5 +1,6 @@
 package org.kss.components 
 {
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import org.kss.KSSComponent;
 	import org.kss.KSSEntity;
@@ -71,12 +72,47 @@ package org.kss.components
 		public function OnCollision(c:KSSCollider):void
 		{
 			//trace("collision with " + c + "!");
+			determineCollisionAreas(c.worldBounds);
 			
 		}
 		
 		public function OnTileCollision(t:TMXTileInfo):void
 		{
 			//trace("Collision with tile!");
+			determineCollisionAreas(t.worldRect);
+		}
+		
+		public function determineCollisionAreas(rect:Rectangle):void
+		{
+			var intersectPoint:Point = new Point();
+			
+			//RIGHT
+			intersectPoint.x = _worldBounds.right;
+			intersectPoint.y = _worldBounds.top+_worldBounds.height/2;
+			if (rect.containsPoint(intersectPoint)){
+				_touchingRight = true;
+			}
+			
+			//LEFT
+			intersectPoint.x = _worldBounds.left;
+			intersectPoint.y = _worldBounds.top+_worldBounds.height/2;
+			if (rect.containsPoint(intersectPoint)){
+				_touchingLeft = true;
+			}
+			
+			//UP
+			intersectPoint.x = _worldBounds.right-_worldBounds.width/2;
+			intersectPoint.y = _worldBounds.top;
+			if (rect.containsPoint(intersectPoint)){
+				_touchingUp = true;
+			}
+			
+			//UP
+			intersectPoint.x = _worldBounds.right-_worldBounds.width/2;
+			intersectPoint.y = _worldBounds.bottom;
+			if (rect.containsPoint(intersectPoint)){
+				_touchingDown = true;
+			}
 		}
 		
 	}

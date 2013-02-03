@@ -39,13 +39,12 @@ package org.kss
 				for (var j:int = 0; j < _numTiles; j++)
 				{
 					//if(surroundingTiles[j].tile.GetPropertyByName("collision")){
-					var tileRect:Rectangle = new Rectangle();
+					/*var tileRect:Rectangle = new Rectangle();
 						tileRect.x = surroundingTiles[j].pos.x;
 						tileRect.y = surroundingTiles[j].pos.y;
 						tileRect.width = surroundingTiles[j].tile.rect.width;
-						tileRect.height = surroundingTiles[j].tile.rect.height;
-						//trace(tileRect);
-						if (_members[i].worldBounds.intersects(tileRect))
+						tileRect.height = surroundingTiles[j].tile.rect.height;*/
+						if (_members[i].worldBounds.intersects(surroundingTiles[j].worldRect))
 						{
 							_members[i].OnTileCollision(surroundingTiles[j]);
 						}

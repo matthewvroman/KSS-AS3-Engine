@@ -88,17 +88,17 @@ package org.kss
 		override public function Update():void
 		{
 			super.Update();
-			var length:int = _entities.length;
-			for (var i:int = 0; i < length; i++)
-			{
-				_entities[i].Update();
-			}
 			
 			for (var j:int = 0; j < _numCollisionGroups; j++)
 			{
 				_collisionGroups[j].Check();
 			}
 			
+			var length:int = _entities.length;
+			for (var i:int = 0; i < length; i++)
+			{
+				_entities[i].Update();
+			}
 		}
 		
 		override public function LateUpdate():void
