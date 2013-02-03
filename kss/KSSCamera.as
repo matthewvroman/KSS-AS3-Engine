@@ -1,5 +1,6 @@
 package org.kss 
 {
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -9,6 +10,8 @@ package org.kss
 	 */
 	public class KSSCamera 
 	{
+		private var _bitmap:Bitmap;
+		
 		private var _width:Number;
 		private var _height:Number;
 		private var _zoom:Number;
@@ -33,6 +36,8 @@ package org.kss
 		{
 			_width = width;
 			_height = height;
+			
+			//_bitmap = bitmap;
 
 			_frame = new Rectangle(0,0, _width, _height);
 			
@@ -45,6 +50,13 @@ package org.kss
 		public function Update():void
 		{
 			
+		}
+		
+		public function set zoom(scale:Number):void
+		{
+			//_bitmap.scaleX = scale;
+			//_bitmap.scaleY = scale;
+			_zoom = scale;
 		}
 		
 		public function Scroll(x:Number, y:Number):void
