@@ -13,6 +13,7 @@ package org.kss
 	{
 		protected var _state:KSSState;	
 		private var _components:Vector.<KSSComponent> = new Vector.<KSSComponent>();
+		private var _numComponents:int = 0;
 		
 		private var _position:Point = new Point(0, 0);
 		public function get position():Point { return _position; }
@@ -27,6 +28,7 @@ package org.kss
 		public function AddComponent(component:KSSComponent):*
 		{
 			_components.push(component);
+			_numComponents = _components.length;
 			
 			return component;
 		}
@@ -38,6 +40,7 @@ package org.kss
 			{
 				component.Destroy();
 				_components.splice(idx, 1);
+				_numComponents = _components.length;
 				return true;
 			}
 			return false;
@@ -61,8 +64,7 @@ package org.kss
 		{
 			var classComponents:Vector.<*> = new Vector.<*>();
 			
-			var length:int = _components.length;
-			for (var i:int = 0; i < length; i++)
+			for (var i:int = 0; i < _numComponents; i++)
 			{
 				if (_components[i] is type)
 				{
@@ -75,6 +77,40 @@ package org.kss
 				
 			return null;
 		}
+		
+		override public function PreUpdate():void
+		{
+			if (!active) return;
+			
+			super.PreUpdate();
+			for (var i:int = 0; i < _numComponents; i++)
+			{
+				_components[i].PreUpdate();
+			}
+		}
+		
+		override public function Update():void
+		{
+			if (!active) return;
+			
+			super.Update();
+			for (var i:int = 0; i < _numComponents; i++)
+			{
+				_components[i].Update();
+			}
+		}
+		
+		override public function LateUpdate():void
+		{
+			if (!active) return;
+			
+			super.LateUpdate();
+			for (var i:int = 0; i < _numComponents; i++)
+			{
+				_components[i].LateUpdate();
+			}
+		}
+		
 		//TODO: THIS
 		public function SendMessage(message:String, receiver:KSSEntity):Boolean
 		{

@@ -26,6 +26,21 @@ package org.kss
 			
 		}
 		
+		override public function PreUpdate():void
+		{
+			super.PreUpdate();
+		}
+		
+		override public function Update():void
+		{
+			super.Update();
+		}
+		
+		override public function LateUpdate():void
+		{
+			super.LateUpdate();
+		}
+		
 		
 		
 		

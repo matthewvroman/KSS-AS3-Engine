@@ -20,6 +20,43 @@ package org.kss
 		public function get Canvas():KSSCanvas { return _canvas; }
 		private var _entities:Vector.<KSSEntity> = new Vector.<KSSEntity>();
 		
+		private var _activeRect:Rectangle;
+		public function get activeRect():Rectangle { return _activeRect; }
+		public function set activeRect(rect:Rectangle):void
+		{
+			_activeRect = rect.clone();
+			_activeRect.x -= _activeRectBuffer;
+			_activeRect.y -= _activeRectBuffer;
+			_activeRect.width += _activeRectBuffer * 2;
+			_activeRect.height += _activeRectBuffer * 2;
+			
+			var length:int = _entities.length;
+			for (var i:int = 0; i < length; i++)
+			{
+				if (_activeRect.containsPoint(_entities[i].position))
+				{
+					_entities[i].active = true;
+				}
+				else 
+				{
+					_entities[i].active = false;
+				}
+			}
+		}
+		
+		private var _activeRectBuffer:Number=0;
+		public function set activeRectBuffer(buffer:Number):void 
+		{ 
+			_activeRectBuffer = buffer;
+			
+			if (!_activeRect) return;
+			
+			_activeRect.x -= _activeRectBuffer;
+			_activeRect.y -= _activeRectBuffer;
+			_activeRect.width += _activeRectBuffer * 2;
+			_activeRect.height += _activeRectBuffer * 2;
+		}
+		
 		private var _collisionGroups:Vector.<KSSCollisionGroup> = new Vector.<KSSCollisionGroup>();
 		private var _numCollisionGroups:int = 0;
 		

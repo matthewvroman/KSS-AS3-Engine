@@ -11,6 +11,7 @@ package org.kss
 	{
 		
 		public var name:String;
+		public var active:Boolean = true;
 		
 		public function KSSObject() 
 		{

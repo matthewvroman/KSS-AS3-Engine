@@ -60,6 +60,12 @@ package org.kss.components
 			_position = data;
 		}
 		
+		override public function LateUpdate():void
+		{
+			super.LateUpdate();
+			Render();
+		}
+		
 		public function Render():void
 		{
 			if (!_pixels) return;

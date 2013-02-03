@@ -27,9 +27,9 @@ package org.kss
 		{
 			for (var i:int = 0; i < _numMembers; i++)
 			{
-				for (var j:int = 0; j < _numMembers; j++)
+				for (var j:int = i; j < _numMembers; j++) //j=i, don't check if the two rects have already been compared
 				{
-					if(i!=j || i<j) //don't check against self and don't check if the two rects have already been compared
+					if(i!=j) //don't check against self
 						Collision(_members[i], _members[j]);
 				}
 			}
