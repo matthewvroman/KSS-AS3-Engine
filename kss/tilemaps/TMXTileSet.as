@@ -13,8 +13,8 @@ package org.kss.tilemaps
 	 */
 	public class TMXTileSet 
 	{
-		private var _firstGID:int;
-		public function get FirstGID():int { return _firstGID; }
+		private var _firstGID:uint;
+		public function get FirstGID():uint { return _firstGID; }
 		private var _name:String;
 		private var _tileWidth:int;
 		private var _tileHeight:int;
@@ -66,6 +66,7 @@ package org.kss.tilemaps
 			_loaded = true;
 			
 			_bitmapData = Bitmap(e.target.content).bitmapData; 
+			
 		}
 		
 		public function generateTileArray():void
@@ -84,9 +85,9 @@ package org.kss.tilemaps
 			}
 		}
 		
-		public function getTile(gid:int):TMXTile
+		public function getTile(gid:uint):TMXTile
 		{
-			if(gid>0){
+			if(gid>0 && gid<(_firstGID+_tiles.length)){
 				return _tiles[gid - _firstGID];
 			}
 			

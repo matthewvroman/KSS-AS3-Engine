@@ -86,10 +86,6 @@ package org.kss.tilemaps
 							}
 						}
 						tileGIDs = tempTileGIDs;
-						trace(tileGIDs);
-						//trace(tileGIDs[0]);
-						trace("length: " + tileGIDs.length);
-					//}
 				}
 			}
 		}

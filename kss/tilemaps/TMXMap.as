@@ -24,6 +24,16 @@ package org.kss.tilemaps
 		private var _objectGroups:Vector.<TMXObjectGroup> = new Vector.<TMXObjectGroup>();
 		private var _layers:Vector.<TMXLayer> = new Vector.<TMXLayer>();
 		
+		public function get ready():Boolean
+		{
+			for (var i:int = 0; i < _tileSets.length; i++)
+			{
+				if (!_tileSets[i].loaded) return false;
+			}
+			
+			return true;
+		}
+		
 		public function TMXMap(canvas:KSSCanvas, filepath:String) 
 		{
 			
@@ -76,6 +86,41 @@ package org.kss.tilemaps
 		
 		public function draw():void
 		{
+			if (!ready) return;
+			//TODO: some of these values should only be assigned once not recalculated every frame
+			//cull based on camera frame
+			var cameraFrame:Rectangle = _canvas.currentCamera.frame;
+			var buffer:int = 2;
+			var startingRow:int = int(cameraFrame.y / _tileHeight);
+			var numRowsInFrame:int = int(cameraFrame.height / _tileHeight);
+			var numRowsToDraw:int = startingRow + numRowsInFrame + buffer;
+			var startingColumn:int = int(cameraFrame.x / _tileWidth);
+			var numColumnsInFrame:int = (cameraFrame.width / _tileWidth);
+			var numColumnsToDraw:int = startingColumn + numColumnsInFrame + buffer;
+			var numColumns:int = _mapWidth;
+			var numRows:int = _mapHeight;
+			var numLayers:int = _layers.length;
+			var tilePos:Point = new Point(0, 0);
+			var tileSet:TMXTileSet;
+			var tile:TMXTile;
+			for (var i:int = startingRow; i < numRowsToDraw; i++)
+			{
+				for (var j:int = startingColumn; j < numColumnsToDraw; j++)
+				{
+					for (var k:int = 0; k < numLayers; k++){
+						var gid:uint = _layers[k].tileGIDs[j+(i*numColumns)];
+						tileSet = getTileSetWithGID(gid);
+						tile = getTile(gid);
+						tilePos.x = j * _tileWidth;
+						tilePos.y = i * _tileHeight;
+						if (tileSet != null && tile != null) {
+							_canvas.RequestRender(tileSet.bitmapData, tile.rect, tilePos);
+						}
+					}
+				}
+			}
+			
+			/*draw everything
 			var numColumns:int = _mapWidth;
 			var numRows:int = _mapHeight;
 			var tilePos:Point = new Point(0, 0);
@@ -85,7 +130,7 @@ package org.kss.tilemaps
 			{
 				for (var j:int = 0; j < numColumns; j++)
 				{
-					var gid:int = _layers[0].tileGIDs[j+(i*numColumns)];
+					var gid:uint = _layers[0].tileGIDs[j+(i*numColumns)];
 					tileSet = getTileSetWithGID(gid);
 					tile = getTile(gid);
 					tilePos.x = j * _tileWidth;
@@ -94,11 +139,10 @@ package org.kss.tilemaps
 						_canvas.RequestRender(tileSet.bitmapData, tile.rect, tilePos);
 					}
 				}
-			}
-			//_canvas.RequestRender(_tileSets[0].bitmapData, new Rectangle(0, 0, 32, 8), new Point(0, 0));
+			}*/
 		}
 		
-		public function getTileSetWithGID(gid:int):TMXTileSet
+		public function getTileSetWithGID(gid:uint):TMXTileSet
 		{
 			for (var i:int = 0; i < _tileSets.length; i++)
 			{
@@ -110,7 +154,7 @@ package org.kss.tilemaps
 			return null;
 		}
 		
-		public function getTile(gid:int):TMXTile
+		public function getTile(gid:uint):TMXTile
 		{  
 			for (var i:int = 0; i < _tileSets.length; i++)
 			{
