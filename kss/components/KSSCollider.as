@@ -89,14 +89,14 @@ package org.kss.components
 			//RIGHT
 			intersectPoint.x = _worldBounds.right;
 			intersectPoint.y = _worldBounds.top+_worldBounds.height/2;
-			if (rect.containsPoint(intersectPoint)){
+			if (!_touchingRight && rect.containsPoint(intersectPoint)){
 				_touchingRight = true;
 			}
 			
 			//LEFT
 			intersectPoint.x = _worldBounds.left;
 			intersectPoint.y = _worldBounds.top+_worldBounds.height/2;
-			if (rect.containsPoint(intersectPoint)){
+			if (!_touchingLeft &&  rect.containsPoint(intersectPoint)){
 				_touchingLeft = true;
 			}
 			
@@ -107,11 +107,47 @@ package org.kss.components
 				_touchingUp = true;
 			}
 			
-			//UP
+			//DOWN
 			intersectPoint.x = _worldBounds.right-_worldBounds.width/2;
 			intersectPoint.y = _worldBounds.bottom;
 			if (rect.containsPoint(intersectPoint)){
 				_touchingDown = true;
+				
+			}
+			
+			unembedFromCollision(rect);
+			
+		}
+		
+		private function unembedFromCollision(collisionRect:Rectangle):void
+		{
+			var adjustment:Number;
+			if (_touchingDown)
+			{
+				adjustment = collisionRect.top - _worldBounds.bottom;
+				if(adjustment<1 && adjustment>-1){
+					_entity.position.y += adjustment;
+				}
+			}else if (_touchingUp)
+			{
+				adjustment = collisionRect.bottom - _worldBounds.top;
+				if(adjustment<1 && adjustment>-1){
+					_entity.position.y += adjustment;
+				}
+			}
+			if (_touchingRight)
+			{
+				adjustment = _worldBounds.right - collisionRect.left;
+				if(adjustment<1 && adjustment>-1){
+					_entity.position.x -= adjustment;
+				}
+			}
+			if (_touchingLeft)
+			{
+				adjustment = _worldBounds.left - collisionRect.right;
+				if(adjustment<1 && adjustment>-1){
+					_entity.position.x -= adjustment;
+				}
 			}
 		}
 		

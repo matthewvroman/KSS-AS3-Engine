@@ -37,6 +37,9 @@ package org.kss
 		
 		private var _input:KSSInput;
 		
+		private var _t:int;
+		public static var deltaTime:Number=0;
+		
 		public function KSSEngine(width:int = 640, height:int = 360, scale:Number = 1.0, bgColor:uint = 0x000000, fps:int = 60 ) 
 		{
 			
@@ -68,6 +71,8 @@ package org.kss
 
 			_currentState = DefaultState;
 			
+			_t = getTimer();
+			
 			this.addEventListener(Event.ENTER_FRAME, OnEnterFrame);
 		}
 		
@@ -75,7 +80,10 @@ package org.kss
 		{
 			
 			_tickPosition = int((getTimer() % 1000) / _framePeriod);
-  
+			var t:int = getTimer();
+			deltaTime = (t- _t) * 0.001;
+			_t = t;
+
 		   if (_tickLastPosition != _tickPosition)
 		   {
 				_tickLastPosition = _tickPosition;
