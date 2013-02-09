@@ -32,7 +32,7 @@ package org.kss.tilemaps
 
 			_properties.push(_property);
 			_numProperties = _properties.length;
-			trace("Added property: " + _property.name);
+			//trace("Added property: " + _property.name);
 		}
 		
 		public function GetPropertyByName(propertyName:String):TMXProperty

@@ -2,6 +2,7 @@ package org.kss.components
 {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.geom.Vector3D;
 	import org.kss.KSSComponent;
 	import org.kss.KSSEntity;
 	import org.kss.tilemaps.TMXTileInfo;
@@ -33,6 +34,30 @@ package org.kss.components
 		public function get touchingRight():Boolean { return _touchingRight; }
 		public function get touchingUp():Boolean { return _touchingUp; }
 		public function get touchingDown():Boolean { return _touchingDown; }
+		
+		private var _flags:Vector.<String> = new Vector.<String>();
+		public function get CollisionFlags():Vector.<String> { return _flags; }
+		
+		public function AddCollisionFlags(flags:Vector.<String>)
+		{
+			_flags.concat(flags);
+		}
+		public function AddCollisionFlag(flag:String):void
+		{
+			_flags.push(flag);
+		}
+		
+		public function RemoveCollisionFlag(flag:String):Boolean
+		{
+			var index = _flags.indexOf(flag);
+			if (index != -1)
+			{
+				_flags.splice(index, 1);
+				return true;
+			}
+			
+			return false;
+		}
 		
 		public function get touching():Boolean 
 		{ 
@@ -76,9 +101,9 @@ package org.kss.components
 			
 		}
 		
-		public function OnTileCollision(t:TMXTileInfo):void
+		public function OnTileCollision(t:TMXTileInfo,collisionFlag:String=""):void
 		{
-			//trace("Collision with tile!");
+			//trace("Collision with tile!" + " Flag: " + collisionFlag);
 			determineCollisionAreas(t.worldRect);
 		}
 		

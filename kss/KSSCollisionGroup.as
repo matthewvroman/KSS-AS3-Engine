@@ -17,6 +17,7 @@ package org.kss
 		private var _map:TMXMap;
 		private function set tileMap(map:TMXMap):void { _map = map; }
 		
+		
 		public function KSSCollisionGroup(groupName:String="",TileMap:TMXMap=null) 
 		{
 			name = groupName;
@@ -29,29 +30,37 @@ package org.kss
 			return false;
 		}
 		
-		public function CheckAgainstTiles():void
+		public function CheckAgainstTiles(_collider:KSSCollider):void
 		{
-			
-			for (var i:int = 0; i < _numMembers; i++)
+			var surroundingTiles:Vector.<TMXTileInfo> = _map.getSurroundingTiles(_collider.worldBounds, 2); //TODO: paramatize buffer
+			var _numTiles:int = surroundingTiles.length;
+			for (var j:int = 0; j < _numTiles; j++)
 			{
-				var surroundingTiles:Vector.<TMXTileInfo> = _map.getSurroundingTiles(_members[i].worldBounds, 2); //TODO: paramatize buffer
-				var _numTiles:int = surroundingTiles.length;
-				for (var j:int = 0; j < _numTiles; j++)
+				if (_collider.worldBounds.intersects(surroundingTiles[j].worldRect))
 				{
-					//if(surroundingTiles[j].tile.GetPropertyByName("collision")){
-					/*var tileRect:Rectangle = new Rectangle();
-						tileRect.x = surroundingTiles[j].pos.x;
-						tileRect.y = surroundingTiles[j].pos.y;
-						tileRect.width = surroundingTiles[j].tile.rect.width;
-						tileRect.height = surroundingTiles[j].tile.rect.height;*/
-						if (_members[i].worldBounds.intersects(surroundingTiles[j].worldRect))
-						{
-							_members[i].OnTileCollision(surroundingTiles[j]);
-						}
-					//}
-					
-					
+					_collider.OnTileCollision(surroundingTiles[j]);
 				}
+			}
+		}
+		
+		private function CheckAgainstTileFlags(_collider:KSSCollider):void
+		{
+			var flags:Vector.<String> = _collider.CollisionFlags;
+			var surroundingTiles:Vector.<TMXTileInfo> = _map.getSurroundingTiles(_collider.worldBounds, 2); //TODO: paramatize buffer
+			var _numTiles:int = surroundingTiles.length;
+			for (var j:int = 0; j < _numTiles; j++)
+			{
+				for (var k:int = 0; k < flags.length; k++)
+				{
+					if(surroundingTiles[j].tile.GetPropertyByName(flags[k])){
+						if (_collider.worldBounds.intersects(surroundingTiles[j].worldRect))
+						{
+							_collider.OnTileCollision(surroundingTiles[j],flags[k]);
+						}
+					}
+				}
+				
+				
 			}
 		}
 		
@@ -60,7 +69,16 @@ package org.kss
 		{
 			if (_map)
 			{
-				CheckAgainstTiles();
+				for (var i:int = 0; i < _numMembers; i++)
+				{
+					var flags:Vector.<String> = _members[i].CollisionFlags;
+					if (flags.length == 0)
+					{
+						CheckAgainstTiles(_members[i]);
+					}else {
+						CheckAgainstTileFlags(_members[i]);
+					}
+				}
 				return;
 			}
 			

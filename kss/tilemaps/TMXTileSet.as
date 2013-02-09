@@ -79,17 +79,21 @@ package org.kss.tilemaps
 				
 				for (var j:int = 0; j < numColumns; j++)
 				{
+					//TODO: I think i+j+_firstGID actually needs to be (i*numColumns)+j+_firstGID
 					var tile:TMXTile = new TMXTile(i + j + _firstGID, new Rectangle(j * _tileWidth, i * _tileHeight,_tileWidth,_tileHeight));
-					
-					var tileXML:XML = src.tile[i + j];
-					if (tileXML!=null)
+					for (var k:int = 0; k < src.tile.length(); k++)
 					{
-						var propertiesLength:int = tileXML.properties.property.length();
-						for (var k:int = 0;  k < propertiesLength; k++)
+						if (((i*numColumns) + j) == int(src.tile[k].@id))
 						{
-							tile.AddProperty(new TMXProperty(tileXML.properties.property[k]));
+							var tileXML:XML = src.tile[k];
+							var propertiesLength:int = tileXML.properties.property.length();
+							for (var l:int = 0;  l < propertiesLength; l++)
+							{ 
+								tile.AddProperty(new TMXProperty(tileXML.properties.property[l]));
+							}
 						}
 					}
+					
 					_tiles.push(tile);
 				}
 			}
