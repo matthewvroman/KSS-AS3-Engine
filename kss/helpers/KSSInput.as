@@ -6,6 +6,8 @@ package org.kss.helpers
 	 */
 	import flash.display.Stage;
 	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	
 	public class KSSInput 
 	{
@@ -19,10 +21,46 @@ package org.kss.helpers
 		private static var keysReleasedThisFrame:Vector.<uint> = new Vector.<uint>();
 		private static var keysPressedThisFrame:Vector.<uint> = new Vector.<uint>();
 		
+		private static var _mousePosition:Point = new Point();
+		public static function get MousePosition():Point { return _mousePosition; } 
+		
+		private static var _mouseDown:Boolean = false;
+		public static function get MouseDown():Boolean { return _mouseDown; }
+		
+		private static var _mouseClicked:Boolean = false;
+		public static function get MouseClicked():Boolean { return _mouseClicked; }
+		
 		public function KSSInput(stage:Stage) 
 		{
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+			
+			
+			stage.addEventListener(MouseEvent.CLICK, onMouseClick);
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+		}
+		
+		private function onMouseClick(e:MouseEvent):void
+		{
+			_mouseClicked = true;
+		}
+		
+		private function onMouseDown(e:MouseEvent):void
+		{
+			_mouseDown = true;
+		}
+		
+		private function onMouseUp(e:MouseEvent):void
+		{
+			_mouseDown = false;
+		}
+		
+		private function onMouseMove(e:MouseEvent):void
+		{
+			_mousePosition.x = e.stageX;
+			_mousePosition.y = e.stageY;
 		}
 		
 		private function onKeyDown(e:KeyboardEvent):void
@@ -67,6 +105,8 @@ package org.kss.helpers
 		{
 			keysReleasedThisFrame.length = 0;
 			keysPressedThisFrame.length = 0;
+			
+			_mouseClicked = false;
 		}
 		
 		public static function isKeyDown(key:uint):Boolean
