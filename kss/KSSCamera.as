@@ -36,8 +36,6 @@ package org.kss
 		{
 			_width = width;
 			_height = height;
-			
-			//_bitmap = bitmap;
 
 			_frame = new Rectangle(0,0, _width, _height);
 			
@@ -57,6 +55,11 @@ package org.kss
 			//_bitmap.scaleX = scale;
 			//_bitmap.scaleY = scale;
 			_zoom = scale;
+		}
+		
+		public function get zoom():Number 
+		{
+			return _zoom;
 		}
 		
 		public function Scroll(x:Number, y:Number):void

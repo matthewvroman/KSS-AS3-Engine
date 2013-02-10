@@ -8,6 +8,7 @@ package org.kss.helpers
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import org.kss.KSSEngine;
 	
 	public class KSSInput 
 	{
@@ -59,8 +60,8 @@ package org.kss.helpers
 		
 		private function onMouseMove(e:MouseEvent):void
 		{
-			_mousePosition.x = e.stageX;
-			_mousePosition.y = e.stageY;
+			_mousePosition.x = e.stageX/KSSEngine.StageScale;
+			_mousePosition.y = e.stageY/KSSEngine.StageScale;
 		}
 		
 		private function onKeyDown(e:KeyboardEvent):void

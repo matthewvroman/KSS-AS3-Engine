@@ -38,7 +38,9 @@ package org.kss
 		private var _input:KSSInput;
 		
 		private var _t:int;
-		public static var deltaTime:Number=0;
+		public static var deltaTime:Number = 0; 
+		
+		private static var _stageScale:Number;
 		
 		public function KSSEngine(width:int = 640, height:int = 360, scale:Number = 1.0, bgColor:uint = 0x000000, fps:int = 60 ) 
 		{
@@ -46,6 +48,7 @@ package org.kss
 			CanvasData = new KSSCanvas(width, height,false,bgColor);
 			Canvas = new Bitmap(CanvasData);
 			Canvas.scaleX = Canvas.scaleY = scale;
+			_stageScale = scale;
 			CanvasRect = new Rectangle(0, 0, width, height);
 			CanvasColor = bgColor;
 			Canvas.smoothing = false;
@@ -57,6 +60,11 @@ package org.kss
 			if (stage) init();
 				else addEventListener(Event.ADDED_TO_STAGE, init);
 			
+		}
+		
+		public static function get StageScale():Number
+		{
+			return _stageScale;
 		}
 		
 		private function init(e:Event = null):void 
