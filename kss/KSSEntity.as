@@ -12,6 +12,7 @@ package org.kss
 	public class KSSEntity extends KSSObject
 	{
 		protected var _state:KSSState;	
+		public function get state():KSSState { return _state; }
 		private var _components:Vector.<KSSComponent> = new Vector.<KSSComponent>();
 		private var _numComponents:int = 0;
 		
@@ -83,7 +84,7 @@ package org.kss
 			if (!active) return;
 			
 			super.PreUpdate();
-			for (var i:int = 0; i < _numComponents; i++)
+			for (var i:int = 0; i < _components.length; i++)
 			{
 				_components[i].PreUpdate();
 			}
@@ -94,7 +95,7 @@ package org.kss
 			if (!active) return;
 			
 			super.Update();
-			for (var i:int = 0; i < _numComponents; i++)
+			for (var i:int = 0; i < _components.length; i++)
 			{
 				_components[i].Update();
 			}
@@ -105,7 +106,7 @@ package org.kss
 			if (!active) return;
 			
 			super.LateUpdate();
-			for (var i:int = 0; i < _numComponents; i++)
+			for (var i:int = 0; i < _components.length; i++)
 			{
 				_components[i].LateUpdate();
 			}
@@ -121,6 +122,13 @@ package org.kss
 		{
 			return true; //got the message
 		}
+		
+		//determine if we're visible in the current camera
+		public function get offscreen():Boolean
+		{
+			return !state.Canvas.currentCamera.frame.containsPoint(_position);
+		}
+		
 		
 		override public function Destroy():void
 		{

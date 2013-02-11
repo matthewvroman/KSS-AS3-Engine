@@ -38,7 +38,17 @@ package org.kss.components
 		private var _flags:Vector.<String> = new Vector.<String>();
 		public function get CollisionFlags():Vector.<String> { return _flags; }
 		
-		public function AddCollisionFlags(flags:Vector.<String>)
+		private var _type:String;
+		public function set type(_collisionType:String):void { _type = _collisionType; }
+		public function get type():String { return _type; }
+		
+		private var _collisionCallback:Function = new Function();
+		public function set CollisionCallback(callback:Function):void { _collisionCallback = callback; }
+		
+		private var _tileCollisionCallback:Function = new Function();
+		public function set TileCollisionCallback(callback:Function):void { _tileCollisionCallback = callback; }
+		
+		public function AddCollisionFlags(flags:Vector.<String>):void
 		{
 			_flags.concat(flags);
 		}
@@ -98,6 +108,7 @@ package org.kss.components
 		{
 			//trace("collision with " + c + "!");
 			determineCollisionAreas(c.worldBounds);
+			_collisionCallback(c);
 			
 		}
 		
@@ -105,6 +116,7 @@ package org.kss.components
 		{
 			//trace("Collision with tile!" + " Flag: " + collisionFlag);
 			determineCollisionAreas(t.worldRect);
+			_tileCollisionCallback(t, collisionFlag);
 		}
 		
 		public function determineCollisionAreas(rect:Rectangle):void
@@ -174,6 +186,12 @@ package org.kss.components
 					_entity.position.x -= adjustment;
 				}
 			}
+		}
+		
+		override public function Destroy():void
+		{
+			entity.state.UnregisterCollider(this);
+			super.Destroy();
 		}
 		
 	}

@@ -81,7 +81,7 @@ package org.kss
 				}
 				return;
 			}
-			
+			//trace(name +": " + _numMembers);
 			for (var i:int = 0; i < _numMembers; i++)
 			{
 				for (var j:int = i; j < _numMembers; j++) //j=i, don't check if the two rects have already been compared
@@ -117,6 +117,7 @@ package org.kss
 			{
 				_members.splice(index, 1);
 				_numMembers--;
+				return true;
 			}
 			
 			return false;

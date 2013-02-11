@@ -19,7 +19,7 @@ package org.kss.components
 		private var _pixels:BitmapData;
 		private var _bitmap:Bitmap;
 		private var _rect:Rectangle;
-		private var _position:Point; //position in the bitmap
+		private var _position:Point = new Point(); //position in the bitmap
 		
 		private var _worldPosition:Point = new Point(0, 0); //position to draw on current state
 		
@@ -39,12 +39,14 @@ package org.kss.components
 			super(entity);
 			
 			_canvas = canvas;
+			
 		}
 		
 		public function set bitmap(data:Bitmap):void
 		{
 			_bitmap = data;
 			_pixels = _bitmap.bitmapData;
+			_rect = new Rectangle(0, 0, _bitmap.width, _bitmap.height);
 			
 		}
 		public function set pixels(data:BitmapData):void

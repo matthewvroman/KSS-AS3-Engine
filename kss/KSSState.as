@@ -78,7 +78,7 @@ package org.kss
 		{
 			super.PreUpdate();
 			var length:int = _entities.length;
-			for (var i:int = 0; i < length; i++)
+			for (var i:int = 0; i < _entities.length; i++)
 			{
 				_entities[i].PreUpdate();
 			}
@@ -94,8 +94,7 @@ package org.kss
 				_collisionGroups[j].Check();
 			}
 			
-			var length:int = _entities.length;
-			for (var i:int = 0; i < length; i++)
+			for (var i:int = 0; i < _entities.length; i++)
 			{
 				_entities[i].Update();
 			}
@@ -104,8 +103,8 @@ package org.kss
 		override public function LateUpdate():void
 		{
 			super.LateUpdate();
-			var length:int = _entities.length;
-			for (var i:int = 0; i < length; i++)
+
+			for (var i:int = 0; i < _entities.length; i++)
 			{
 				_entities[i].LateUpdate();
 			}
@@ -189,13 +188,17 @@ package org.kss
 		
 		public function UnregisterCollider(collider:KSSCollider):Boolean
 		{
+			var removed:Boolean = false;
 			for (var i:int = 0; i < _numCollisionGroups; i++)
 			{
 				if (_collisionGroups[i].RemoveMember(collider))
-					return true;
+				{
+					//trace("Unregistered: " + collider.type + " : " + collider.entity.name + " from group: " + _collisionGroups[i].name);
+					removed = true;
+				}
 			}
 			
-			return false;
+			return removed;
 		}
 		
 		public function RegisterCollisionGroup(groupName:String,TileMap:TMXMap=null):Boolean
