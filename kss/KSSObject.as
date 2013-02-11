@@ -43,6 +43,11 @@ package org.kss
 			
 		}
 		
+		public function Draw():void
+		{
+			
+		}
+		
 		public function Destroy():void
 		{
 			

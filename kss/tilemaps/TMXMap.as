@@ -126,9 +126,12 @@ package org.kss.tilemaps
 			return surroundingTiles;
 		}
 		
-		public function draw():void
+		override public function Draw():void
 		{
 			if (!ready) return;
+			
+			super.Draw();
+			
 			//TODO: some of these values should only be assigned once not recalculated every frame
 			//cull based on camera frame
 			var cameraFrame:Rectangle = _canvas.currentCamera.frame;

@@ -20,6 +20,8 @@ package org.kss
 		public function get position():Point { return _position; }
 		public function set position(point:Point):void { _position = point; }
 		
+		public function get cameraPosition():Point { return new Point(position.x-state.Canvas.currentCamera.frame.x,position.y-state.Canvas.currentCamera.frame.y) }
+		
 		public function KSSEntity(state:KSSState) 
 		{
 			_state = state;
@@ -109,6 +111,17 @@ package org.kss
 			for (var i:int = 0; i < _components.length; i++)
 			{
 				_components[i].LateUpdate();
+			}
+		}
+		
+		override public function Draw():void
+		{
+			if (!active) return;
+			
+			super.Draw();
+			for (var i:int = 0; i < _components.length; i++)
+			{
+				_components[i].Draw();
 			}
 		}
 		

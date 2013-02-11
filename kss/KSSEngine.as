@@ -95,12 +95,16 @@ package org.kss
 		   if (_tickLastPosition != _tickPosition)
 		   {
 				_tickLastPosition = _tickPosition;
-				CanvasData.lock();
-				CanvasData.fillRect(CanvasRect, CanvasColor);
+				
 				PreUpdate();
 				Update();
 				LateUpdate();
+	
+				CanvasData.lock();
+				CanvasData.fillRect(CanvasRect, CanvasColor);
+				Draw();
 				CanvasData.unlock();
+				
 				_input.flush();
 				
 		   }
@@ -132,6 +136,10 @@ package org.kss
 			CanvasData.currentCamera.LateUpdate();
 		}
 		
+		public function Draw():void
+		{
+			_currentState.Draw();
+		}
 	}
 
 }

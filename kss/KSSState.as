@@ -5,6 +5,7 @@ package org.kss
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import org.kss.components.KSSCollider;
+	import org.kss.components.KSSRenderer;
 	import org.kss.KSSCollisionGroup;
 	import org.kss.KSSEntity;
 	import org.kss.KSSEngine;
@@ -20,6 +21,8 @@ package org.kss
 		private var _canvas:KSSCanvas;
 		public function get Canvas():KSSCanvas { return _canvas; }
 		private var _entities:Vector.<KSSEntity> = new Vector.<KSSEntity>();
+		
+		private var _guiEntities:Vector.<KSSEntity> = new Vector.<KSSEntity>();
 		
 		private var _activeRect:Rectangle;
 		public function get activeRect():Rectangle { return _activeRect; }
@@ -83,20 +86,29 @@ package org.kss
 				_entities[i].PreUpdate();
 			}
 			
+			for (var j:int = 0; j < _guiEntities.length; j++)
+			{
+				_guiEntities[j].PreUpdate();
+			}
+			
 		}
 		
 		override public function Update():void
 		{
 			super.Update();
 			
-			for (var j:int = 0; j < _numCollisionGroups; j++)
+			for (var k:int = 0; k < _numCollisionGroups; k++)
 			{
-				_collisionGroups[j].Check();
+				_collisionGroups[k].Check();
 			}
 			
 			for (var i:int = 0; i < _entities.length; i++)
 			{
 				_entities[i].Update();
+			}
+			for (var j:int = 0; j < _guiEntities.length; j++)
+			{
+				_guiEntities[j].Update();
 			}
 		}
 		
@@ -108,7 +120,70 @@ package org.kss
 			{
 				_entities[i].LateUpdate();
 			}
+			for (var j:int = 0; j < _guiEntities.length; j++)
+			{
+				_guiEntities[j].LateUpdate();
+			}
 			
+		}
+		
+		override public function Draw():void
+		{
+			super.Draw();
+			for (var i:int = 0; i < _entities.length; i++)
+			{
+				_entities[i].Draw();
+			}
+			for (var j:int = 0; j < _guiEntities.length; j++)
+			{
+				_guiEntities[j].Draw();
+			}
+		}
+		
+		public function MoveEntityToBack(entity:KSSEntity):void
+		{
+			var idx:int = _entities.indexOf(entity);
+			if (idx != -1)
+			{
+				//remove from vector
+				_entities.splice(idx, 1);
+				
+				//put in as first element
+				_entities.unshift(entity);
+			}
+			
+		}
+		
+		public function MoveEntityToFront(entity:KSSEntity):void
+		{
+			var idx:int = _entities.indexOf(entity);
+			if (idx != -1)
+			{
+				//remove from vector
+				_entities.splice(idx, 1);
+				
+				//put in as first element
+				_entities.push(entity);
+			}
+			
+		}
+		
+		public function AddGUIEntity(entity:KSSEntity):void
+		{
+			_guiEntities.push(entity);
+			KSSRenderer(entity.GetComponentOfType(KSSRenderer)).GUIElement = true;
+		}
+		
+		public function RemoveGUIEntity(entity:KSSEntity):Boolean
+		{
+			var idx:int = _guiEntities.indexOf(entity);
+			if (idx != -1)
+			{
+				entity.Destroy();
+				_guiEntities.splice(idx, 1);
+				return true;
+			}
+			return false;
 		}
 		
 		public function AddEntity(entity:KSSEntity):void

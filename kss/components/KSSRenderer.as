@@ -20,7 +20,7 @@ package org.kss.components
 		private var _bitmap:Bitmap;
 		private var _rect:Rectangle;
 		private var _position:Point = new Point(); //position in the bitmap
-		
+
 		private var _worldPosition:Point = new Point(0, 0); //position to draw on current state
 		
 		private var _playAnimation:Boolean = false;
@@ -32,7 +32,9 @@ package org.kss.components
 		private var _frameSpeed:int = 10; //play animation every '_frameSpeed' frames
 		private var _frameCount:int = 0;
 		
-		public var scrollRate:Number=1;
+		public var scrollRate:Number = 1;
+		
+		public var GUIElement:Boolean = false;
 		
 		public function KSSRenderer(entity:KSSEntity, canvas:KSSCanvas) 
 		{
@@ -67,8 +69,15 @@ package org.kss.components
 		override public function LateUpdate():void
 		{
 			super.LateUpdate();
+		}
+		
+		override public function Draw():void
+		{
+			
+			super.Draw();
 			Render();
 		}
+		
 		
 		public function Render():void
 		{
@@ -81,7 +90,7 @@ package org.kss.components
 			updateAnimation();
 			
 			//_canvas.copyPixels(_pixels, _rect, _worldPosition);
-			_canvas.RequestRender(_pixels, _rect, _worldPosition,scrollRate);
+			_canvas.RequestRender(_pixels, _rect, _worldPosition,GUIElement?0:scrollRate);
 			
 			//Debug Draw rectangle
 			//_canvas.copyPixels(new BitmapData(_rect.width, _rect.height, true, 0x77FF0000),_rect,_worldPosition);
