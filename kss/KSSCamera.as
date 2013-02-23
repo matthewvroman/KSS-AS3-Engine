@@ -30,6 +30,8 @@ package org.kss
 		
 		private var _deadZone:Rectangle;
 		
+		public function set deadZone(zone:Rectangle):void { _deadZone = zone; }
+		
 		private var _target:KSSEntity;
 
 		public function KSSCamera(width:Number, height:Number)
@@ -37,8 +39,14 @@ package org.kss
 			_width = width;
 			_height = height;
 
-			_frame = new Rectangle(0,0, _width, _height);
-			
+			_frame = new Rectangle(0, 0, _width, _height);
+
+			_deadZone = frame.clone();
+			_deadZone.x += _width / 5;
+			_deadZone.width -= (_width / 5)*2;
+			_deadZone.y += _height / 5;
+			_deadZone.height -= (_height / 5)*2;
+			trace(_deadZone);
 		}
 		
 		public function PreUpdate():void
@@ -89,8 +97,26 @@ package org.kss
 		}
 		
 		public function FollowTarget(entity:KSSEntity):void
-		{
+		{//trace(entity.cameraPosition);
 			_target = entity;
+			if (_deadZone.left > _target.cameraPosition.x)
+			{
+				_frame.x += _target.cameraPosition.x - _deadZone.left;
+			}
+			if (_deadZone.right < _target.cameraPosition.x)
+			{
+				_frame.x += _target.cameraPosition.x - _deadZone.right;
+			}
+			if (_deadZone.top > _target.cameraPosition.y)
+			{
+				_frame.y += _target.cameraPosition.y - _deadZone.top;
+			}
+			
+			if (_deadZone.bottom < _target.cameraPosition.y)
+			{
+				_frame.y += _target.cameraPosition.y - _deadZone.bottom;
+			}
+			
 		}
 		
 		public function CenterOnTarget(entity:KSSEntity):void
