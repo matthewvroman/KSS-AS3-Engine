@@ -276,9 +276,26 @@ package org.kss
 			return removed;
 		}
 		
-		public function RegisterCollisionGroup(groupName:String,TileMap:TMXMap=null):Boolean
+		public function RegisterTileCollisionGroup(groupName:String, TileMap:TMXMap):Boolean
 		{
-			var newGroup:KSSCollisionGroup = new KSSCollisionGroup(groupName,TileMap);
+			var newGroup:KSSTileCollisionGroup = new KSSTileCollisionGroup(groupName, TileMap);
+			_collisionGroups.push(newGroup);
+			_numCollisionGroups = _collisionGroups.length;
+			
+			return true;
+		}
+		public function RegisterCollisionGroup(groupName:String):Boolean
+		{
+			var newGroup:KSSCollisionGroup = new KSSCollisionGroup(groupName);
+			_collisionGroups.push(newGroup);
+			_numCollisionGroups = _collisionGroups.length;
+			
+			return true;
+		}
+		
+		public function RegisterStaticCollisionGroup(groupName:String, collider:KSSCollider):Boolean
+		{
+			var newGroup:KSSStaticCollisionGroup = new KSSStaticCollisionGroup(groupName, collider);
 			_collisionGroups.push(newGroup);
 			_numCollisionGroups = _collisionGroups.length;
 			

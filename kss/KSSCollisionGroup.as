@@ -11,17 +11,13 @@ package org.kss
 	public class KSSCollisionGroup 
 	{
 		public var name:String;
-		private var _members:Vector.<KSSCollider> = new Vector.<KSSCollider>();
-		private var _numMembers:int = 0; //try to be as optimized as possible and not calculate every frame
-		
-		private var _map:TMXMap;
-		private function set tileMap(map:TMXMap):void { _map = map; }
+		protected var _members:Vector.<KSSCollider> = new Vector.<KSSCollider>();
+		protected var _numMembers:int = 0; //try to be as optimized as possible and not calculate every frame
 		
 		
-		public function KSSCollisionGroup(groupName:String="",TileMap:TMXMap=null) 
+		public function KSSCollisionGroup(groupName:String="") 
 		{
 			name = groupName;
-			_map = TileMap;
 		}
 		
 		//chceks the group against k
@@ -30,58 +26,10 @@ package org.kss
 			return false;
 		}
 		
-		public function CheckAgainstTiles(_collider:KSSCollider):void
-		{
-			var surroundingTiles:Vector.<TMXTileInfo> = _map.getSurroundingTiles(_collider.worldBounds, 2); //TODO: paramatize buffer
-			var _numTiles:int = surroundingTiles.length;
-			for (var j:int = 0; j < _numTiles; j++)
-			{
-				if (_collider.worldBounds.intersects(surroundingTiles[j].worldRect))
-				{
-					_collider.OnTileCollision(surroundingTiles[j]);
-				}
-			}
-		}
-		
-		private function CheckAgainstTileFlags(_collider:KSSCollider):void
-		{
-			var flags:Vector.<String> = _collider.CollisionFlags;
-			var surroundingTiles:Vector.<TMXTileInfo> = _map.getSurroundingTiles(_collider.worldBounds, 2); //TODO: paramatize buffer
-			var _numTiles:int = surroundingTiles.length;
-			for (var j:int = 0; j < _numTiles; j++)
-			{
-				for (var k:int = 0; k < flags.length; k++)
-				{
-					if(surroundingTiles[j].tile.GetPropertyByName(flags[k])){
-						if (_collider.worldBounds.intersects(surroundingTiles[j].worldRect))
-						{
-							_collider.OnTileCollision(surroundingTiles[j],flags[k]);
-						}
-					}
-				}
-				
-				
-			}
-		}
-		
 		//checks within the group
 		public function Check():void
 		{
-			if (_map)
-			{
-				for (var i:int = 0; i < _numMembers; i++)
-				{
-					var flags:Vector.<String> = _members[i].CollisionFlags;
-					if (flags.length == 0)
-					{
-						CheckAgainstTiles(_members[i]);
-					}else {
-						CheckAgainstTileFlags(_members[i]);
-					}
-				}
-				return;
-			}
-			//trace(name +": " + _numMembers);
+
 			for (var i:int = 0; i < _numMembers; i++)
 			{
 				for (var j:int = i; j < _numMembers; j++) //j=i, don't check if the two rects have already been compared
@@ -90,6 +38,7 @@ package org.kss
 						Collision(_members[i], _members[j]);
 				}
 			}
+
 		}
 		
 		public function Collision(k1:KSSCollider, k2:KSSCollider):Boolean
