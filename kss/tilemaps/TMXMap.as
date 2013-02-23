@@ -26,12 +26,18 @@ package org.kss.tilemaps
 		
 		private var _tileSets:Vector.<TMXTileSet> = new Vector.<TMXTileSet>();
 		private var _objectGroups:Vector.<TMXObjectGroup> = new Vector.<TMXObjectGroup>();
+		public function get ObjectGroups():Vector.<TMXObjectGroup>{ return _objectGroups; }
+		
 		private var _layers:Vector.<TMXLayer> = new Vector.<TMXLayer>();
+		
+		public var loadedCallback:Function;
 		
 		// Bits on the far end of the 32-bit global tile ID are used for tile flags
 		private const FLIPPED_HORIZONTALLY_FLAG:uint = 0x80000000;
 		private const FLIPPED_VERTICALLY_FLAG:uint  = 0x40000000;
 		private const FLIPPED_DIAGONALLY_FLAG:uint   = 0x20000000;
+		
+		private var _fileDirectory:String="";
 		
 		public function get ready():Boolean
 		{
@@ -51,6 +57,15 @@ package org.kss.tilemaps
 			var loader:URLLoader = new URLLoader();
 			loader.addEventListener(Event.COMPLETE, onMapLoaded);
 			loader.load(new URLRequest(filepath));
+			
+			var folders:Array = filepath.split('/');
+			if(folders.length>0){
+				for (var i:int = 0; i < folders.length-1; i++)
+				{
+					trace(folders[i]);
+					_fileDirectory += folders[i] + "/";
+				}
+			}
 		}
 		
 		private function onMapLoaded(e:Event):void
@@ -66,13 +81,18 @@ package org.kss.tilemaps
 			parseTileSets(src);
 			parseTMXLayers(src);
 			parseTMXObjectGroups(src);
+			
+			if (loadedCallback!=null)
+			{
+				loadedCallback();
+			}
 		}
 		
 		public function parseTileSets(src:XML):void
 		{
 			for (var i:int = 0; i < src.tileset.length(); i++)
 			{
-				_tileSets.push(new TMXTileSet(src.tileset[i]));
+				_tileSets.push(new TMXTileSet(src.tileset[i],_fileDirectory));
 			}
 		}
 		
@@ -91,7 +111,7 @@ package org.kss.tilemaps
 				_objectGroups.push(new TMXObjectGroup(src.objectgroup[i]));
 			}
 		}
-		
+	
 		public function getSurroundingTiles(rect:Rectangle, tileBuffer:int):Vector.<TMXTileInfo>
 		{
 			//determine tile that point is in

@@ -32,7 +32,9 @@ package org.kss.tilemaps
 		private var _bitmapData:BitmapData;
 		public function get bitmapData():BitmapData { return _bitmapData; }
 		
-		public function TMXTileSet(src:XML) 
+		private var _fileDirectory:String;
+		
+		public function TMXTileSet(src:XML,fileDirectory:String="") 
 		{
 			//trace(src);
 			_firstGID = src.@firstgid;
@@ -40,7 +42,7 @@ package org.kss.tilemaps
 			_tileWidth = src.@tilewidth;
 			_tileHeight = src.@tileheight;
 			
-			_imgSrc = src.image.@source;
+			_imgSrc = fileDirectory+src.image.@source;
 			_imgWidth = src.image.@width;
 			_imgHeight = src.image.@height;
 			
