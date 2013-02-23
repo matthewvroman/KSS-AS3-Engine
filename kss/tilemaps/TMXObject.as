@@ -7,11 +7,16 @@ package org.kss.tilemaps
 	 */
 	public class TMXObject 
 	{
-		public var _type:String;
-		public var _position:Point;
-		public var _width:Number;
-		public var _height:Number;
-		public var _properties:Vector.<TMXProperty>;
+		private var _type:String;
+		public function get type():String { return _type; }
+		private var _position:Point;
+		public function get position():Point { return _position; }
+		private var _width:Number;
+		public function get width():Number { return _width; }
+		private var _height:Number;
+		public function get height():Number { return _height; }
+		private var _properties:Vector.<TMXProperty>;
+		public function get properties():Vector.<TMXProperty> { return _properties; }
 		
 		public function TMXObject(src:XML) 
 		{
@@ -37,6 +42,8 @@ package org.kss.tilemaps
 		
 		public function GetProperty(propertyName:String):*
 		{
+			if (!_properties) return null;
+			
 			var propertiesLength:int = _properties.length;
 			for (var i:int = 0; i < propertiesLength; i++)
 			{
