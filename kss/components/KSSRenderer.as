@@ -36,6 +36,10 @@ package org.kss.components
 		
 		public var GUIElement:Boolean = false;
 		
+		private var _visible:Boolean = true;
+		public function set visible(value:Boolean):void { _visible = value; }
+		public function get visible():Boolean { return _visible; }
+		
 		public function KSSRenderer(entity:KSSEntity, canvas:KSSCanvas) 
 		{
 			super(entity);
@@ -81,7 +85,7 @@ package org.kss.components
 		
 		public function Render():void
 		{
-			if (!_pixels) return;
+			if (!_pixels || !_visible) return;
 			
 			
 			_worldPosition.x = _position.x + _entity.position.x;
