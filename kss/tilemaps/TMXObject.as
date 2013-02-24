@@ -7,6 +7,8 @@ package org.kss.tilemaps
 	 */
 	public class TMXObject 
 	{
+		private var _name:String;
+		public function get name():String { return _name; }
 		private var _type:String;
 		public function get type():String { return _type; }
 		private var _position:Point;
@@ -20,6 +22,7 @@ package org.kss.tilemaps
 		
 		public function TMXObject(src:XML) 
 		{
+			_name = src.@name;
 			_type = src.@type;
 			_position = new Point(src.@x, src.@y);
 			_width = src.@width;
