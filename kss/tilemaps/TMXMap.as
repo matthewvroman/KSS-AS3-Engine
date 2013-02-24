@@ -111,7 +111,16 @@ package org.kss.tilemaps
 				_objectGroups.push(new TMXObjectGroup(src.objectgroup[i]));
 			}
 		}
-	
+		
+		public function setTileAtWorldPosToTileWithProp(pos:Point,property:String):void
+		{
+			var column:int = int(pos.x / _tileWidth);
+			var row:int = int(pos.y / _tileHeight);
+			for (var k:int = 0; k < _layers.length; k++){
+				_layers[k].tileGIDs[column + (row * _mapWidth)] = getTileWithProperty(property).GID;
+			}
+		}
+		
 		public function getSurroundingTiles(rect:Rectangle, tileBuffer:int):Vector.<TMXTileInfo>
 		{
 			//determine tile that point is in
@@ -257,6 +266,20 @@ package org.kss.tilemaps
 				if (_tileSets[i].FirstGID > gid) continue;
 
 				return _tileSets[i].getTile(gid);
+			}
+			
+			return null;
+		}
+		
+		public function getTileWithProperty(property:String):TMXTile
+		{
+			for (var i:int = 0; i < _tileSets.length; i++)
+			{
+				var tile:TMXTile = _tileSets[i].getTileWithProperty(property);
+				if (tile)
+				{
+					return tile;
+				}
 			}
 			
 			return null;

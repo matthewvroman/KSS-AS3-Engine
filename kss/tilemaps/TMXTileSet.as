@@ -82,7 +82,7 @@ package org.kss.tilemaps
 				for (var j:int = 0; j < numColumns; j++)
 				{
 					//TODO: I think i+j+_firstGID actually needs to be (i*numColumns)+j+_firstGID
-					var tile:TMXTile = new TMXTile(i + j + _firstGID, new Rectangle(j * _tileWidth, i * _tileHeight,_tileWidth,_tileHeight));
+					var tile:TMXTile = new TMXTile((i*numColumns)+j+_firstGID, new Rectangle(j * _tileWidth, i * _tileHeight,_tileWidth,_tileHeight));
 					for (var k:int = 0; k < src.tile.length(); k++)
 					{
 						if (((i*numColumns) + j) == int(src.tile[k].@id))
@@ -105,6 +105,20 @@ package org.kss.tilemaps
 		{
 			if(gid>0 && gid<(_firstGID+_tiles.length)){
 				return _tiles[gid - _firstGID];
+			}
+			
+			return null;
+		}
+		
+		public function getTileWithProperty(property:String):TMXTile
+		{
+			for (var i:int = 0; i < _tiles.length; i++)
+			{
+				var _property:TMXProperty = _tiles[i].GetPropertyByName(property);
+				if (_property && _property.name == property)
+				{
+					return _tiles[i];
+				}
 			}
 			
 			return null;

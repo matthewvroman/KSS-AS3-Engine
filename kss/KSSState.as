@@ -210,7 +210,6 @@ package org.kss
 			{
 				if (_entities[i].name == eName)
 				{
-					trace("found entity");
 					return _entities[i];
 				}
 			}
