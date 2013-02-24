@@ -203,6 +203,21 @@ package org.kss
 			return false;
 		}
 		
+		public function GetEntityWithName(eName:String):KSSEntity
+		{
+			var length:int = _entities.length;
+			for (var i:int = 0; i < length; i++)
+			{
+				if (_entities[i].name == eName)
+				{
+					trace("found entity");
+					return _entities[i];
+				}
+			}
+			
+			return null;
+		}
+		
 		public function GetEntityOfType(type:Class):KSSEntity
 		{
 			var length:int = _entities.length;
@@ -293,7 +308,7 @@ package org.kss
 			return true;
 		}
 		
-		public function RegisterStaticCollisionGroup(groupName:String, collider:KSSCollider):Boolean
+		public function RegisterStaticCollisionGroup(groupName:String, collider:KSSCollider=null):Boolean
 		{
 			var newGroup:KSSStaticCollisionGroup = new KSSStaticCollisionGroup(groupName, collider);
 			_collisionGroups.push(newGroup);
@@ -314,6 +329,19 @@ package org.kss
 				}
 			}
 			return false;
+		}
+		
+		public function GetCollisionGroup(groupName:String):KSSCollisionGroup
+		{
+			for (var i:int = 0; i < _collisionGroups.length; i++)
+			{
+				if (_collisionGroups[i].name == groupName)
+				{
+					return _collisionGroups[i];
+				}
+			}
+			
+			return null;
 		}
 		
 		override public function Destroy():void

@@ -38,6 +38,9 @@ package org.kss.components
 		private var _flags:Vector.<String> = new Vector.<String>();
 		public function get CollisionFlags():Vector.<String> { return _flags; }
 		
+		private var _lastFrameCollisions:Vector.<KSSCollider> = new Vector.<KSSCollider>();
+		private var _currentCollisions:Vector.<KSSCollider> = new Vector.<KSSCollider>();
+		
 		private var _type:String;
 		public function set type(_collisionType:String):void { _type = _collisionType; }
 		public function get type():String { return _type; }
@@ -45,8 +48,18 @@ package org.kss.components
 		private var _collisionCallback:Function = new Function();
 		public function set CollisionCallback(callback:Function):void { _collisionCallback = callback; }
 		
+		private var _collisionExitCallback:Function = new Function();
+		public function set CollisionExitCallback(callback:Function):void { _collisionExitCallback = callback; }
+		
+		private var _collisionEnterCallback:Function = new Function();
+		public function set CollisionEnterCallback(callback:Function):void { _collisionEnterCallback = callback; }
+		
 		private var _tileCollisionCallback:Function = new Function();
 		public function set TileCollisionCallback(callback:Function):void { _tileCollisionCallback = callback; }
+		
+		public var unembed:Boolean = false;
+		
+		public var trigger:Boolean = false;
 		
 		public function AddCollisionFlags(flags:Vector.<String>):void
 		{
@@ -82,6 +95,8 @@ package org.kss.components
 			super(entity);
 			_entity = entity;
 			
+			_type = entity.name;
+			
 			if (collisionRect) {
 				bounds = collisionRect;
 			}
@@ -102,14 +117,53 @@ package org.kss.components
 			
 			super.PreUpdate();
 			_touchingDown = _touchingLeft = _touchingRight = _touchingUp = false;
+			
+			//if collider in currentcollisions doesnt exist in last frame then we entered that collider
+			//if collider in lastframecollisions doesnt exist in current collisions then we exited that collider
+			
+			for (var i:int = 0; i < _lastFrameCollisions.length; i++)
+			{
+				if (_currentCollisions.indexOf(_lastFrameCollisions[i]) == -1)
+				{
+					//trace("Exit collider " + _lastFrameCollisions[i].name);
+					if (_collisionExitCallback)
+						_collisionExitCallback(_lastFrameCollisions[i]);
+				}
+			}
+			
+			for (var j:int = 0; j < _currentCollisions.length; j++)
+			{
+				if (_lastFrameCollisions.indexOf(_currentCollisions[j]) == -1)
+				{
+					//trace("Entered collider " + _currentCollisions[j].name);
+					if (_collisionEnterCallback)
+						_collisionEnterCallback(_currentCollisions[j]);
+				}
+			}
+
+			_lastFrameCollisions.length = 0;
+			for (var k:int = 0; k < _currentCollisions.length; k++)
+			{
+				_lastFrameCollisions.push(_currentCollisions[k]);
+			}
+			_currentCollisions.length = 0;
+			
+			
+		}
+		
+		private function AddCollision(c:KSSCollider):void
+		{
+			_currentCollisions.push(c);
 		}
 		
 		public function OnCollision(c:KSSCollider):void
 		{
 			//trace("collision with " + c + "!");
-			determineCollisionAreas(c.worldBounds);
+			if (!c.trigger) 
+				determineCollisionAreas(c.worldBounds);
 			_collisionCallback(c);
 			
+			_currentCollisions.push(c);
 		}
 		
 		public function OnTileCollision(t:TMXTileInfo,collisionFlag:String=""):void
@@ -152,7 +206,8 @@ package org.kss.components
 				
 			}
 			
-			unembedFromCollision(rect);
+			if(unembed)
+				unembedFromCollision(rect);
 			
 		}
 		
