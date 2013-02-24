@@ -11,7 +11,24 @@ package org.kss
 	{
 		
 		public var name:String;
-		public var active:Boolean = true;
+		private var _active:Boolean = true;
+		public function set active(value:Boolean):void
+		{
+			if (_active != value)
+			{
+				if (value)
+				{
+					OnActive();
+				}
+				else 
+				{
+					OnDeactive();
+				}
+			}
+			_active = value;
+		}
+		
+		public function get active():Boolean { return _active; }
 		
 		public function KSSObject() 
 		{
@@ -20,12 +37,22 @@ package org.kss
 		
 		public function Awake():void
 		{
-	
+
 		}
 		
 		public function Start():void
 		{
 			
+		}
+		
+		public function OnActive():void
+		{
+
+		}
+		
+		public function OnDeactive():void
+		{
+
 		}
 		
 		public function PreUpdate():void
