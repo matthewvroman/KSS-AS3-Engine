@@ -10,7 +10,7 @@ package org.kss
 	{
 		
 		private var _soleChecker:KSSCollider;
-		public function set checker(collider:KSSCollider) { _soleChecker = collider; }
+		public function set checker(collider:KSSCollider):void { _soleChecker = collider; }
 		
 		public function KSSStaticCollisionGroup(groupName:String = "", collider:KSSCollider=null) 
 		{

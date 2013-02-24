@@ -72,7 +72,7 @@ package org.kss.components
 		
 		public function RemoveCollisionFlag(flag:String):Boolean
 		{
-			var index = _flags.indexOf(flag);
+			var index:int = _flags.indexOf(flag);
 			if (index != -1)
 			{
 				_flags.splice(index, 1);
@@ -126,8 +126,7 @@ package org.kss.components
 				if (_currentCollisions.indexOf(_lastFrameCollisions[i]) == -1)
 				{
 					//trace("Exit collider " + _lastFrameCollisions[i].name);
-					if (_collisionExitCallback)
-						_collisionExitCallback(_lastFrameCollisions[i]);
+					_collisionExitCallback(_lastFrameCollisions[i]);
 				}
 			}
 			
@@ -136,8 +135,7 @@ package org.kss.components
 				if (_lastFrameCollisions.indexOf(_currentCollisions[j]) == -1)
 				{
 					//trace("Entered collider " + _currentCollisions[j].name);
-					if (_collisionEnterCallback)
-						_collisionEnterCallback(_currentCollisions[j]);
+					_collisionEnterCallback(_currentCollisions[j]);
 				}
 			}
 
